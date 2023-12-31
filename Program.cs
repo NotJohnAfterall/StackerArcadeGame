@@ -10,114 +10,113 @@ namespace PVA_Game
 {
     internal class Program
     {
+        //TODO: make when space is pressed the mover stops moving
+        
+        
+        
+        static public char[,] displayArray = new char[10, 11];
+        static public char[,] systemArray = new char[10, 11];
+        static public int moverPos = 2;
+        static public int moverPosBefore = 0;
+
         static void Main(string[] args)
         {
-            GameZoneInitiation();
-            MoverInitiation();
-            MoverMove();
-            Console.ReadKey();
             
-        }
-
-        public static char[,] gameZone = new char[10, 11];
-        public static int MoverHeight = 0;
-
-        public static void MoverInitiation()
-        {
-            MoverHeight = 8;
-            int MoverStage = 0;
-            MoverHeight = MoverHeight - MoverStage;
             
-            for (int x = 1; x <= 3 ; x++)
-            {
-                gameZone[x, MoverHeight] = 'O';
-                Console.SetCursorPosition(x, MoverHeight);
-                Console.Write(gameZone[x, MoverHeight]);
-            }
-
-        }
-        public static bool isSpacePressed = false;
-        public static void checkSpacePressed()
-        {
-            isSpacePressed = false;
             while (true)
             {
-                isSpacePressed = false;
-                if (Console.KeyAvailable)
-                {
-
-                    ConsoleKeyInfo key = Console.ReadKey(true);
-                    if (key.Key == ConsoleKey.Spacebar)
-                    {
-                        isSpacePressed = true;
-                    }
-                }
+                SetBordersInArray();
+                MoverMove();
+                
+                Thread.Sleep(100);
+                Console.Clear();
             }
+            
+            
+
+
         }
+
+
         static void MoverMove()
         {
 
-            
-            while (isSpacePressed != true)
+            displayArray[displayArray.GetLength(0) - 2, moverPos] = 'O';
+            foreach (var item in displayArray)
             {
-                for (int i = 1; i < gameZone.GetLength(0) - 1; i++)
+                if (item == 'O')
                 {
-
-                    Console.SetCursorPosition(i, MoverHeight);
-                    bool was1stdeleted = false;
-                    int howmanywasreplaced = 0;
-
-                    if (gameZone[i, MoverHeight] == 'O' && was1stdeleted == false)
-                    {
-                        gameZone[i, MoverHeight] = ' ';
-                        Console.Write(gameZone[i, MoverHeight]);
-                        was1stdeleted = true;
-                    }
-                    else if (howmanywasreplaced < 3)
-                    {
-                        gameZone[i, MoverHeight] = 'O';
-                        Console.Write(gameZone[i, MoverHeight]);
-                        howmanywasreplaced++;
-                    }
-                    
-                    
-                    
-
-
-
-
-                    Thread.Sleep(1000);
-                    
+                    displayArray[displayArray.GetLength(0) - 2, moverPos - 1] = 'O';
+                    displayArray[displayArray.GetLength(0) - 2, moverPos + 1] = 'O';
                 }
             }
-        }
-
-        
-        
-        
-        public static void GameZoneInitiation()
-        {
-            
-            for (int i = 0; i < gameZone.GetLength(0); i++)
+            while (true)
             {
-                for (int j = 0; j < gameZone.GetLength(1); j++)
+                if (Console.ReadKey(true).Key == ConsoleKey.Spacebar)
                 {
-                    gameZone[i, j] = ' ';
-                    if (i == 0 || i == 9)
+                    Console.WriteLine("space pressed");
+                    Display();
+                    break;
+                }
+                
+                if (moverPos == displayArray.GetLength(1) - 3 || (moverPos < moverPosBefore && moverPosBefore != 3))
+                {
+                    
+                    moverPosBefore = moverPos;
+                    moverPos--;
+                    Display();
+                    break;
+                }
+                else if (moverPos == 2 || moverPos > moverPosBefore)
+                {
+                    moverPosBefore = moverPos;
+                    moverPos++;
+                    Display();
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("else triggerd");
+
+
+                }
+            }
+            
+        }
+        static void SetBordersInArray()
+        {
+            for (int i = 0; i < displayArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < displayArray.GetLength(1); j++)
+                {
+                    if (i == 0 || i == displayArray.GetLength(0) - 1)
                     {
-                        gameZone[i, j] = '#';
-                        Console.Write(gameZone[i,j]);
+                        displayArray[i, j] = '-';
+                    }
+                    else if (j == 0 || j == displayArray.GetLength(1) - 1)
+                    {
+                        displayArray[i, j] = '|';
                     }
                     else
                     {
-                        gameZone[i, 0] = '#';
-                        gameZone[i, 10] = '#';
-                        Console.Write(gameZone[i,j]);
+                        displayArray[i, j] = ' ';
                     }
                 }
-                Console.WriteLine();
-                
             }
         }
+
+        static void Display()
+        {
+            for (int i = 0; i < displayArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < displayArray.GetLength(1); j++)
+                {
+                    Console.Write(displayArray[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+          
+        
     }
 }
