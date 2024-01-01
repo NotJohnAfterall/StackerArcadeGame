@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics.Contracts;
+using System.Diagnostics;
 
 namespace PVA_Game
 {
@@ -37,7 +38,7 @@ namespace PVA_Game
 
         }
 
-
+        
         static void MoverMove()
         {
 
