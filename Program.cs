@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics.Contracts;
 using System.Diagnostics;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace PVA_Game
 {
@@ -19,6 +20,11 @@ namespace PVA_Game
         static public char[,] systemArray = new char[10, 11];
         static public int moverPos = 2;
         static public int moverPosBefore = 0;
+        static public int spacebarPressedTimes = 0;
+        static public int levelChanged = 0;
+        static public int level1moverPos;
+
+
 
         static void Main(string[] args)
         {
@@ -26,11 +32,39 @@ namespace PVA_Game
             
             while (true)
             {
-                SetBordersInArray();
-                MoverMove();
+                SpaceCounter();
+                if (spacebarPressedTimes == 0)
+                {
+                    SetBordersInArray();
+                    Console.WriteLine(levelChanged); Console.WriteLine(spacebarPressedTimes);
+                    
+                    MoverMove();
+
+                    Thread.Sleep(100);
+                    Console.Clear();
+                }
+                else if (spacebarPressedTimes == 1)
+                {
+                    SetBordersInArray();
+                    Console.WriteLine(levelChanged); Console.WriteLine(spacebarPressedTimes);
+                    if (levelChanged == 0)
+                    {
+                        Console.WriteLine("triggerd in two");
+                        afterSpacePress();
+                        levelChanged++;
+                        Console.Clear();
+                        
+                    }
+                    MoverMove();
+                    Thread.Sleep(100);
+                    Console.Clear();
+                    
+                }
+                else
+                {
+                    
+                }
                 
-                Thread.Sleep(100);
-                Console.Clear();
             }
             
             
@@ -38,27 +72,31 @@ namespace PVA_Game
 
         }
 
-        
+        static void SpaceCounter()
+        {
+            
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Spacebar)
+                {
+                        spacebarPressedTimes++;
+                }
+               
+            
+        }
         static void MoverMove()
         {
 
-            displayArray[displayArray.GetLength(0) - 2, moverPos] = 'O';
+            displayArray[displayArray.GetLength(0) - 2 - spacebarPressedTimes, moverPos] = 'O';
             foreach (var item in displayArray)
             {
                 if (item == 'O')
                 {
-                    displayArray[displayArray.GetLength(0) - 2, moverPos - 1] = 'O';
-                    displayArray[displayArray.GetLength(0) - 2, moverPos + 1] = 'O';
+                    displayArray[displayArray.GetLength(0) - 2 - spacebarPressedTimes, moverPos - 1] = 'O';
+                    displayArray[displayArray.GetLength(0) - 2 - spacebarPressedTimes, moverPos + 1] = 'O';
                 }
             }
             while (true)
             {
-                if (Console.ReadKey(true).Key == ConsoleKey.Spacebar)
-                {
-                    Console.WriteLine("space pressed");
-                    Display();
-                    break;
-                }
+                
                 
                 if (moverPos == displayArray.GetLength(1) - 3 || (moverPos < moverPosBefore && moverPosBefore != 3))
                 {
@@ -118,6 +156,23 @@ namespace PVA_Game
             }
         }
           
+        static void afterSpacePress()
+        {
+            level1moverPos = moverPos;
+            foreach (var item in displayArray)
+            {
+                if (item == 'O')
+                {
+                    Console.WriteLine("afterSpacePress triggerd");
+                    displayArray[displayArray.GetLength(0) - 2, level1moverPos] = '#';
+                    displayArray[displayArray.GetLength(0) - 2, level1moverPos - 1] = '#';
+                    displayArray[displayArray.GetLength(0) - 2, level1moverPos + 1] = '#';
+                    Display();
+                    Console.WriteLine("afterSpacePress ended");
+                }
+                
+            }
+        }
         
     }
 }
