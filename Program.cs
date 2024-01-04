@@ -22,7 +22,7 @@ namespace PVA_Game
         static public int moverPosBefore = 0;
         static public int spacebarPressedTimes = 0;
         static public int levelChanged = 0;
-        static public int level1moverPos;
+        static public int level1moverPos = 0;
 
 
 
@@ -36,28 +36,27 @@ namespace PVA_Game
                 if (spacebarPressedTimes == 0)
                 {
                     SetBordersInArray();
-                    Console.WriteLine(levelChanged); Console.WriteLine(spacebarPressedTimes);
                     
                     MoverMove();
-
                     Thread.Sleep(100);
                     Console.Clear();
                 }
                 else if (spacebarPressedTimes == 1)
                 {
-                    SetBordersInArray();
-                    Console.WriteLine(levelChanged); Console.WriteLine(spacebarPressedTimes);
+                    SetBordersInArray();                    
+                    
                     if (levelChanged == 0)
                     {
-                        Console.WriteLine("triggerd in two");
                         afterSpacePress();
                         levelChanged++;
-                        Console.Clear();
+                        
                         
                     }
                     MoverMove();
                     Thread.Sleep(100);
                     Console.Clear();
+
+                    
                     
                 }
                 else
@@ -84,8 +83,8 @@ namespace PVA_Game
         }
         static void MoverMove()
         {
-
             displayArray[displayArray.GetLength(0) - 2 - spacebarPressedTimes, moverPos] = 'O';
+
             foreach (var item in displayArray)
             {
                 if (item == 'O')
@@ -93,11 +92,22 @@ namespace PVA_Game
                     displayArray[displayArray.GetLength(0) - 2 - spacebarPressedTimes, moverPos - 1] = 'O';
                     displayArray[displayArray.GetLength(0) - 2 - spacebarPressedTimes, moverPos + 1] = 'O';
                 }
+                else if (item == '#')
+                {
+
+
+
+                }
+            }
+
+            if (level1moverPos != 0)
+            {
+                displayArray[displayArray.GetLength(0) - 2, level1moverPos - 1] = '#';
+                displayArray[displayArray.GetLength(0) - 2, level1moverPos + 1] = '#';
+                displayArray[displayArray.GetLength(0) - 2, level1moverPos] = '#';
             }
             while (true)
             {
-                
-                
                 if (moverPos == displayArray.GetLength(1) - 3 || (moverPos < moverPosBefore && moverPosBefore != 3))
                 {
                     
@@ -130,11 +140,11 @@ namespace PVA_Game
                 {
                     if (i == 0 || i == displayArray.GetLength(0) - 1)
                     {
-                        displayArray[i, j] = '-';
+                        displayArray[i, j] = '─';
                     }
                     else if (j == 0 || j == displayArray.GetLength(1) - 1)
                     {
-                        displayArray[i, j] = '|';
+                        displayArray[i, j] = '│';
                     }
                     else
                     {
@@ -159,19 +169,7 @@ namespace PVA_Game
         static void afterSpacePress()
         {
             level1moverPos = moverPos;
-            foreach (var item in displayArray)
-            {
-                if (item == 'O')
-                {
-                    Console.WriteLine("afterSpacePress triggerd");
-                    displayArray[displayArray.GetLength(0) - 2, level1moverPos] = '#';
-                    displayArray[displayArray.GetLength(0) - 2, level1moverPos - 1] = '#';
-                    displayArray[displayArray.GetLength(0) - 2, level1moverPos + 1] = '#';
-                    Display();
-                    Console.WriteLine("afterSpacePress ended");
-                }
-                
-            }
+            displayArray[displayArray.GetLength(0) - 2, level1moverPos] = '#';
         }
         
     }
