@@ -23,6 +23,15 @@ namespace PVA_Game
         static public int spacebarPressedTimes = 0;
         static public int levelChanged = 0;
         static public int level1moverPos = 0;
+        static public int level2moverPos = 0;
+        static public int level3moverPos = 0;
+        static public int level4moverPos = 0;
+        static public int level5moverPos = 0;
+        static public int level6moverPos = 0;
+        static public int level7moverPos = 0;
+        static public int level8moverPos = 0;
+        static public int freezeMoverPos = 0;
+        static public int hashtagIndex = 0;
 
 
 
@@ -41,28 +50,28 @@ namespace PVA_Game
                     Thread.Sleep(100);
                     Console.Clear();
                 }
-                else if (spacebarPressedTimes == 1)
+                else 
                 {
                     SetBordersInArray();                    
                     
                     if (levelChanged == 0)
                     {
-                        afterSpacePress();
                         levelChanged++;
+                        afterSpacePress();
+                        
                         
                         
                     }
+                    
                     MoverMove();
+                    
                     Thread.Sleep(100);
                     Console.Clear();
 
                     
                     
                 }
-                else
-                {
-                    
-                }
+                
                 
             }
             
@@ -81,10 +90,54 @@ namespace PVA_Game
                
             
         }
+
+        static void printPrevious()
+        {
+            
+
+        }
         static void MoverMove()
         {
+            
             displayArray[displayArray.GetLength(0) - 2 - spacebarPressedTimes, moverPos] = 'O';
-
+            
+                if (spacebarPressedTimes >= 7)
+                {
+                    spacebarPressedTimes = 7;
+                }
+                switch (levelChanged)
+                    {
+                        case 1:
+                            level1moverPos = freezeMoverPos;
+                            printFreezed(freezeMoverPos, levelChanged);
+                            
+                            displayArray[displayArray.GetLength(0) - (1 + levelChanged), level1moverPos] = '#';
+                            break;
+                        case 2:
+                            level2moverPos = freezeMoverPos;
+                            displayArray[displayArray.GetLength(0) - (1 + levelChanged), level1moverPos] = '#';
+                            break;
+                        case 3:
+                            level3moverPos = freezeMoverPos;
+                            break;
+                        case 4:
+                            level4moverPos = freezeMoverPos;
+                            break;
+                        case 5:
+                            level5moverPos = freezeMoverPos;
+                            break;
+                        case 6:
+                            level6moverPos = freezeMoverPos;
+                            break;
+                        case 7:
+                            level7moverPos = freezeMoverPos;
+                            break;
+                        case 8:
+                            level8moverPos = freezeMoverPos;
+                            break;
+                    
+                }
+            GetHashtagIndex(displayArray);
             foreach (var item in displayArray)
             {
                 if (item == 'O')
@@ -94,18 +147,12 @@ namespace PVA_Game
                 }
                 else if (item == '#')
                 {
-
-
-
+                    displayArray[displayArray.GetLength(0) - (1 + levelChanged), hashtagIndex - 1] = '#';
+                    displayArray[displayArray.GetLength(0) - (1 + levelChanged), hashtagIndex + 1] = '#';
                 }
             }
 
-            if (level1moverPos != 0)
-            {
-                displayArray[displayArray.GetLength(0) - 2, level1moverPos - 1] = '#';
-                displayArray[displayArray.GetLength(0) - 2, level1moverPos + 1] = '#';
-                displayArray[displayArray.GetLength(0) - 2, level1moverPos] = '#';
-            }
+            
             while (true)
             {
                 if (moverPos == displayArray.GetLength(1) - 3 || (moverPos < moverPosBefore && moverPosBefore != 3))
@@ -168,8 +215,29 @@ namespace PVA_Game
           
         static void afterSpacePress()
         {
-            level1moverPos = moverPos;
-            displayArray[displayArray.GetLength(0) - 2, level1moverPos] = '#';
+
+            freezeMoverPos = moverPos;
+            displayArray[displayArray.GetLength(0) - (1 + levelChanged) , freezeMoverPos] = '#';
+            printPrevious();
+        }
+
+        static void printFreezed(int xypos, int Lvlheight)
+        {
+            
+        }
+        static void GetHashtagIndex(char[,] array)
+        {
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    if (array[i, j] == '#')
+                    {
+                        hashtagIndex = j;
+                    }
+                }
+            }
+            
         }
         
     }
