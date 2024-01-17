@@ -37,6 +37,8 @@ namespace PVA_Game
         static public bool didlevelChanged = false;
         static public int levelBefore = 0;
         static public bool alreadypassed = false;
+        static public bool stackAproved = false;
+        static public int[] freezedLevelPoses = {level1moverPos, level2moverPos, level3moverPos, level4moverPos, level5moverPos, level6moverPos, level7moverPos, level8moverPos };
 
 
 
@@ -85,7 +87,7 @@ namespace PVA_Game
                     Thread.Sleep(100);
                     Console.Clear();
 
-
+                    
 
                 }
 
@@ -103,7 +105,7 @@ namespace PVA_Game
             {
                 if (freezeMoverPos == freezeMoverPosBefore - 1)
                 {
-                    displayArray
+                    //displayArray
                 }
             }
         }
