@@ -22,40 +22,34 @@ namespace PVA_Game
         static public int moverPosBefore = 0;
         static public int spacebarPressedTimes = 0;
         static public int levelChanged = 0;
-        static public int level1moverPos = 0;
-        static public int level2moverPos = 0;
-        static public int level3moverPos = 0;
-        static public int level4moverPos = 0;
-        static public int level5moverPos = 0;
-        static public int level6moverPos = 0;
-        static public int level7moverPos = 0;
-        static public int level8moverPos = 0;
         static public int freezeMoverPos = 0;
         static public int freezeMoverPosBefore = 0;
         static public int hashtagIndexX = 0;
         static public int hashtagIndexY = 0;
-        static public bool didlevelChanged = false;
         static public int levelBefore = 0;
         static public bool alreadypassed = false;
         static public bool stackAproved = false;
-        static public int[] freezedLevelPoses = {level1moverPos, level2moverPos, level3moverPos, level4moverPos, level5moverPos, level6moverPos, level7moverPos, level8moverPos };
+        static public int[] freezedLevelPoses = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        static public bool stackingChecked = false;
+        static public int moverState = 0;
+        static public int[] levelsPrintType = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
+        //Mover states 0 = normal, 1 = 2x on right, 2 = 1x on right, -1 = 2x on left, -2 = 1x on left
 
         static void Main(string[] args)
         {
-            didlevelChanged = true;
 
+            
             while (true)
             {
-                Console.WriteLine(didlevelChanged);
                 SpaceCounter();
                 Console.WriteLine($"Variables {spacebarPressedTimes} {levelBefore}");
                 if (spacebarPressedTimes == 0)
                 {
+                    stackChecker();
                     Console.WriteLine("space = 0");
                     SetBordersInArray();
-
                     MoverMove();
                     Thread.Sleep(100);
                     Console.Clear();
@@ -65,49 +59,62 @@ namespace PVA_Game
                     SetBordersInArray();
                     if (spacebarPressedTimes > levelBefore)
                     {
+                        
                         Console.WriteLine($"LEVEL CHANGE TRIGERED {spacebarPressedTimes} {levelChanged}");
                         if (spacebarPressedTimes > 8) { spacebarPressedTimes = 8; }
                         else { levelChanged++; freezeMoverPos = moverPos; }
-
+                        stackingChecked = false;
 
                         //Thread.Sleep(1000);
-                        didlevelChanged = false;
 
 
 
 
                     }
-                    else
-                    {
-                        Console.WriteLine("else");
-                    }
-
                     MoverMove();
+                    stackChecker();
 
                     Thread.Sleep(100);
                     Console.Clear();
 
-                    
-
                 }
-
-
             }
-
-
-
-
         }
 
         static void stackChecker()
         {
-            if (freezeMoverPos > freezeMoverPosBefore)
+            if (stackingChecked == false)
             {
-                if (freezeMoverPos == freezeMoverPosBefore - 1)
+                if (spacebarPressedTimes > 1 && freezeMoverPos == freezeMoverPosBefore)
                 {
-                    //displayArray
+                    
                 }
+                else if (freezeMoverPos == freezedLevelPoses[levelChanged - 1])
+                {
+                    levelsPrintType[levelChanged] = 1;
+                }
+                else if (freezeMoverPos == freezedLevelPoses[levelChanged - 1] - 2)
+                {
+                    levelsPrintType[levelChanged] = 2;
+                }
+                else if (freezeMoverPos == freezeMoverPosBefore + 1)
+                {
+                    levelsPrintType[levelChanged] = -1;
+                }
+                else if (freezeMoverPos == freezeMoverPosBefore + 2)
+                {
+                    levelsPrintType[levelChanged] = -2;
+                }
+                else
+                {
+                    levelsPrintType[levelChanged] = 0;
+                }
+
+
+                stackingChecked = true;
             }
+            
+            
         }
 
         static void SpaceCounter()
@@ -133,71 +140,67 @@ namespace PVA_Game
             switch (levelChanged)
             {
                 case 1:
-                    level1moverPos = freezeMoverPos;
-                    print(level1moverPos, levelChanged);
+                    freezedLevelPoses[1] = freezeMoverPos; 
+                    for (int i = 1; i <= 1; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (1 - i), levelsPrintType[i]);
+                    }
                     levelBefore = 1;
                     break;
                 case 2:
-                    level2moverPos = freezeMoverPos; freezeMoverPosBefore = level1moverPos;
-                    print(level1moverPos, levelChanged-1);
-                    print(level2moverPos, levelChanged);
-                    levelBefore =2;
+                    freezedLevelPoses[2] = freezeMoverPos; freezeMoverPosBefore = freezedLevelPoses[1];
+                    for (int i = 1; i <= 2; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (2 - i), levelsPrintType[i]);
+                    }
+                    levelBefore = 2;
                     break;
                 case 3:
-                    level3moverPos = freezeMoverPos; freezeMoverPosBefore = level2moverPos;
-                    print(level1moverPos, levelChanged - 2);
-                    print(level2moverPos, levelChanged - 1);
-                    print(level3moverPos, levelChanged);
+                    freezedLevelPoses[3] = freezeMoverPos; freezeMoverPosBefore = freezedLevelPoses[2];
+                    for (int i = 1; i <= 3; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (3 - i), levelsPrintType[i]);
+                    }
                     levelBefore = 3;
                     break;
                 case 4:
-                    level4moverPos = freezeMoverPos; freezeMoverPosBefore = level3moverPos;
-                    print(level1moverPos, levelChanged - 3);
-                    print(level2moverPos, levelChanged - 2);
-                    print(level3moverPos, levelChanged - 1);
-                    print(level4moverPos, levelChanged);
+                    freezedLevelPoses[4] = freezeMoverPos; freezeMoverPosBefore = freezedLevelPoses[3];
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (4 - i), levelsPrintType[i]);
+                    }
                     levelBefore = 4;
                     break;
                 case 5:
-                    level5moverPos = freezeMoverPos; freezeMoverPosBefore = level3moverPos;
-                    print(level1moverPos, levelChanged - 4);
-                    print(level2moverPos, levelChanged - 3);
-                    print(level3moverPos, levelChanged - 2);
-                    print(level4moverPos, levelChanged - 1);
-                    print(level5moverPos, levelChanged);
+                    freezedLevelPoses[5] = freezeMoverPos; freezeMoverPosBefore = freezedLevelPoses[3];
+                    for (int i = 1; i <= 5; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (5 - i), levelsPrintType[i]);
+                    }
                     levelBefore = 5;
                     break;
                 case 6:
-                    level6moverPos = freezeMoverPos; freezeMoverPosBefore = level4moverPos;
-                    print(level1moverPos, levelChanged - 5);
-                    print(level2moverPos, levelChanged - 4);
-                    print(level3moverPos, levelChanged - 3);
-                    print(level4moverPos, levelChanged - 2);
-                    print(level5moverPos, levelChanged - 1);
-                    print(level6moverPos, levelChanged);
+                    freezedLevelPoses[6] = freezeMoverPos; freezeMoverPosBefore = freezedLevelPoses[4];
+                    for (int i = 1; i <= 6; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (6 - i), levelsPrintType[i]);
+                    }
                     levelBefore = 6;
                     break;
                 case 7:
-                    level7moverPos = freezeMoverPos; freezeMoverPosBefore = level5moverPos;
-                    print(level1moverPos, levelChanged - 6);
-                    print(level2moverPos, levelChanged - 5);
-                    print(level3moverPos, levelChanged - 4);
-                    print(level4moverPos, levelChanged - 3);
-                    print(level5moverPos, levelChanged - 2);
-                    print(level6moverPos, levelChanged - 1);
-                    print(level7moverPos, levelChanged);
+                    freezedLevelPoses[7] = freezeMoverPos; freezeMoverPosBefore = freezedLevelPoses[5];
+                    for (int i = 1; i <= 7; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (7 - i), levelsPrintType[i]);
+                    }
                     levelBefore = 7;
                     break;
                 case 8:
-                    level8moverPos = freezeMoverPos;
-                    print(level1moverPos, levelChanged - 7);
-                    print(level2moverPos, levelChanged - 6);
-                    print(level3moverPos, levelChanged - 5);
-                    print(level4moverPos, levelChanged - 4);
-                    print(level5moverPos, levelChanged - 3);
-                    print(level6moverPos, levelChanged - 2);
-                    print(level7moverPos, levelChanged - 1);
-                    print(level8moverPos, levelChanged);
+                    freezedLevelPoses[8] = freezeMoverPos;
+                    for (int i = 1; i <= 8; i++)
+                    {
+                        print(freezedLevelPoses[i], levelChanged - (8 - i), levelsPrintType[i]);
+                    }
                     levelBefore = 8;
                     break;
 
@@ -277,11 +280,39 @@ namespace PVA_Game
             }
         }
 
-        static void print(int x, int y)
+        static void print(int x, int y, int printtype)
         {
-            displayArray[displayArray.GetLength(0) - (1 + y), x] = '#';
-            displayArray[displayArray.GetLength(0) - (1 + y), x - 1] = '#';
-            displayArray[displayArray.GetLength(0) - (1 + y), x + 1] = '#';
+
+            switch (printtype)
+            {
+                case 0:
+                    displayArray[displayArray.GetLength(0) - (1 + y), x] = '#';
+                    displayArray[displayArray.GetLength(0) - (1 + y), x - 1] = '#';
+                    displayArray[displayArray.GetLength(0) - (1 + y), x + 1] = '#';
+                    break;
+                case 1:
+                    displayArray[displayArray.GetLength(0) - (1 + y), x] = '#';
+                    displayArray[displayArray.GetLength(0) - (1 + y), x + 1] = '#';
+                    break;
+                case 2:
+                    displayArray[displayArray.GetLength(0) - (1 + y), x + 1] = '#';
+                    break;
+                case -1:
+                    displayArray[displayArray.GetLength(0) - (1 + y), x] = '#';
+                    displayArray[displayArray.GetLength(0) - (1 + y), x - 1] = '#';
+                    break;
+                case -2:
+                    displayArray[displayArray.GetLength(0) - (1 + y), x - 1] = '#';
+                    break;
+            }
+            //if (printType == 0)
+            //{
+            //    displayArray[displayArray.GetLength(0) - (1 + y), x] = '#';
+            //    displayArray[displayArray.GetLength(0) - (1 + y), x - 1] = '#';
+            //    displayArray[displayArray.GetLength(0) - (1 + y), x + 1] = '#';
+            //}
+
+
         }
 
     }
