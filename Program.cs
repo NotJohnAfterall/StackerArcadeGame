@@ -44,11 +44,10 @@ namespace PVA_Game
             while (true)
             {
                 SpaceCounter();
-                Console.WriteLine($"Variables {spacebarPressedTimes} {levelBefore}");
+                //Console.WriteLine($"Variables {spacebarPressedTimes} {levelBefore}");
                 if (spacebarPressedTimes == 0)
                 {
-                    stackChecker();
-                    Console.WriteLine("space = 0");
+                    //Console.WriteLine("space = 0");
                     SetBordersInArray();
                     MoverMove();
                     Thread.Sleep(100);
@@ -59,8 +58,9 @@ namespace PVA_Game
                     SetBordersInArray();
                     if (spacebarPressedTimes > levelBefore)
                     {
+
                         
-                        Console.WriteLine($"LEVEL CHANGE TRIGERED {spacebarPressedTimes} {levelChanged}");
+                        //Console.WriteLine($"LEVEL CHANGE TRIGERED {spacebarPressedTimes} {levelChanged}");
                         if (spacebarPressedTimes > 8) { spacebarPressedTimes = 8; }
                         else { levelChanged++; freezeMoverPos = moverPos; }
                         stackingChecked = false;
@@ -73,6 +73,7 @@ namespace PVA_Game
                     }
                     MoverMove();
                     stackChecker();
+                    
 
                     Thread.Sleep(100);
                     Console.Clear();
@@ -81,40 +82,72 @@ namespace PVA_Game
             }
         }
 
+        static void WinScreen()
+        {
+            Thread.Sleep(1000);
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.Clear();
+            for (int i = 0; i < 10; i++) {
+                for (int a = 0; a < 16; a++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                    Console.Write("YOU WIN !!!\t");
+                    }
+                    Console.WriteLine();
+
+                }
+                Console.Clear();
+                for (int b = 0; b < 16; b++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                    Console.Write("Congratulations !!!\t");
+                    }
+                    Console.WriteLine();
+
+                }
+                Console.Clear();
+            }
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
+
+        static void LoseScreen()
+        {
+            Thread.Sleep(1000);
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.Clear();
+            for (int i = 0; i < 16; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Console.Write("YOU LOSE\t");
+                }
+                Console.WriteLine();
+                  
+            }
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
+
+
         static void stackChecker()
         {
-            if (stackingChecked == false)
+            if ((freezedLevelPoses[levelChanged] == freezedLevelPoses[levelChanged -1]) || levelChanged < 2 )
             {
-                if (spacebarPressedTimes > 1 && freezeMoverPos == freezeMoverPosBefore)
+                if (levelChanged == 8 )
                 {
-                    
+                    WinScreen();
                 }
-                else if (freezeMoverPos == freezedLevelPoses[levelChanged - 1])
-                {
-                    levelsPrintType[levelChanged] = 1;
-                }
-                else if (freezeMoverPos == freezedLevelPoses[levelChanged - 1] - 2)
-                {
-                    levelsPrintType[levelChanged] = 2;
-                }
-                else if (freezeMoverPos == freezeMoverPosBefore + 1)
-                {
-                    levelsPrintType[levelChanged] = -1;
-                }
-                else if (freezeMoverPos == freezeMoverPosBefore + 2)
-                {
-                    levelsPrintType[levelChanged] = -2;
-                }
-                else
-                {
-                    levelsPrintType[levelChanged] = 0;
-                }
-
-
+                //Console.WriteLine("Stacking checked");
+                stackAproved = true;
                 stackingChecked = true;
             }
-            
-            
+            else
+            {
+                LoseScreen();
+            }
         }
 
         static void SpaceCounter()
@@ -258,7 +291,7 @@ namespace PVA_Game
                     }
                     else if (j == 0 || j == displayArray.GetLength(1) - 1)
                     {
-                        displayArray[i, j] = '│';
+                        displayArray[i, j] = '|';
                     }
                     else
                     {
