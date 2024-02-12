@@ -47,7 +47,6 @@ namespace PVA_Game
                 Console.WriteLine($"Variables {spacebarPressedTimes} {levelBefore}");
                 if (spacebarPressedTimes == 0)
                 {
-                    stackChecker();
                     Console.WriteLine("space = 0");
                     SetBordersInArray();
                     MoverMove();
@@ -59,6 +58,7 @@ namespace PVA_Game
                     SetBordersInArray();
                     if (spacebarPressedTimes > levelBefore)
                     {
+
                         
                         Console.WriteLine($"LEVEL CHANGE TRIGERED {spacebarPressedTimes} {levelChanged}");
                         if (spacebarPressedTimes > 8) { spacebarPressedTimes = 8; }
@@ -83,38 +83,23 @@ namespace PVA_Game
 
         static void stackChecker()
         {
-            if (stackingChecked == false)
+            for (int i = 0; i < displayArray.GetLength(1); i++)
             {
-                if (spacebarPressedTimes > 1 && freezeMoverPos == freezeMoverPosBefore)
+                if (displayArray[ displayArray.GetLength(0) - (spacebarPressedTimes + 1), i] == '#' && displayArray[displayArray.GetLength(0) -(spacebarPressedTimes + 1), i - 1] == '#' && spacebarPressedTimes -1 >= 2)
                 {
-                    
+                    stackAproved = true;
+                    Console.WriteLine("approved");
                 }
-                else if (freezeMoverPos == freezedLevelPoses[levelChanged - 1])
+                else if (displayArray[displayArray.GetLength(0) - (spacebarPressedTimes + 1), i] == '#' && displayArray[displayArray.GetLength(0) - (spacebarPressedTimes + 1), i - 1] != '#')
                 {
-                    levelsPrintType[levelChanged] = 1;
-                }
-                else if (freezeMoverPos == freezedLevelPoses[levelChanged - 1] - 2)
-                {
-                    levelsPrintType[levelChanged] = 2;
-                }
-                else if (freezeMoverPos == freezeMoverPosBefore + 1)
-                {
-                    levelsPrintType[levelChanged] = -1;
-                }
-                else if (freezeMoverPos == freezeMoverPosBefore + 2)
-                {
-                    levelsPrintType[levelChanged] = -2;
+                    Console.Write(displayArray.GetLength(0) - spacebarPressedTimes); Console.WriteLine(i);
+                    Console.WriteLine("failed");
                 }
                 else
                 {
-                    levelsPrintType[levelChanged] = 0;
+                    
                 }
-
-
-                stackingChecked = true;
             }
-            
-            
         }
 
         static void SpaceCounter()
@@ -258,7 +243,7 @@ namespace PVA_Game
                     }
                     else if (j == 0 || j == displayArray.GetLength(1) - 1)
                     {
-                        displayArray[i, j] = '│';
+                        displayArray[i, j] = '|';
                     }
                     else
                     {
