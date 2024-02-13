@@ -29,10 +29,11 @@ namespace PVA_Game
         static public int levelBefore = 0;
         static public bool alreadypassed = false;
         static public bool stackAproved = false;
-        static public int[] freezedLevelPoses = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        static public int[] freezedLevelPoses = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         static public bool stackingChecked = false;
         static public int moverState = 0;
-        static public int[] levelsPrintType = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        static public int[] levelsPrintType = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        static public int randomNumber = 100;
 
 
         //Mover states 0 = normal, 1 = 2x on right, 2 = 1x on right, -1 = 2x on left, -2 = 1x on left
@@ -40,7 +41,7 @@ namespace PVA_Game
         static void Main(string[] args)
         {
 
-            
+
             while (true)
             {
                 SpaceCounter();
@@ -50,7 +51,7 @@ namespace PVA_Game
                     //Console.WriteLine("space = 0");
                     SetBordersInArray();
                     MoverMove();
-                    Thread.Sleep(100);
+                    Thread.Sleep(randomNumber);
                     Console.Clear();
                 }
                 else
@@ -59,11 +60,12 @@ namespace PVA_Game
                     if (spacebarPressedTimes > levelBefore)
                     {
 
-                        
+
                         //Console.WriteLine($"LEVEL CHANGE TRIGERED {spacebarPressedTimes} {levelChanged}");
                         if (spacebarPressedTimes > 8) { spacebarPressedTimes = 8; }
                         else { levelChanged++; freezeMoverPos = moverPos; }
                         stackingChecked = false;
+                        Pojebavac();
 
                         //Thread.Sleep(1000);
 
@@ -73,13 +75,40 @@ namespace PVA_Game
                     }
                     MoverMove();
                     stackChecker();
-                    
+                    Console.WriteLine(randomNumber);
 
-                    Thread.Sleep(100);
+
+                    Thread.Sleep(randomNumber);
                     Console.Clear();
 
                 }
             }
+        }
+
+        static void Pojebavac()
+        {
+            if (spacebarPressedTimes > 2)
+            {
+
+
+                Random random = new Random();
+                int chance = random.Next(1, 10);
+                if (chance <= 2 + spacebarPressedTimes - 2) { GenerateRandomSpeedHigh(); }
+                else { GenerateRandomSpeed(); }
+                
+            }
+         }
+
+        static void GenerateRandomSpeed()
+        {
+            Random random = new Random();
+            randomNumber = random.Next(50, 250);
+        }
+
+        static void GenerateRandomSpeedHigh()
+        {
+            Random random = new Random();
+            randomNumber = random.Next(35, 100);
         }
 
         static void WinScreen()
@@ -88,6 +117,7 @@ namespace PVA_Game
             Console.BackgroundColor = ConsoleColor.Green;
             Console.Clear();
             for (int i = 0; i < 10; i++) {
+                Console.Clear();
                 for (int a = 0; a < 16; a++)
                 {
                     for (int j = 0; j < 8; j++)
@@ -105,9 +135,7 @@ namespace PVA_Game
                     Console.Write("Congratulations !!!\t");
                     }
                     Console.WriteLine();
-
                 }
-                Console.Clear();
             }
             Console.ReadKey();
             Environment.Exit(0);
@@ -129,6 +157,7 @@ namespace PVA_Game
             }
             Console.ReadKey();
             Environment.Exit(0);
+            
         }
 
 
@@ -291,7 +320,7 @@ namespace PVA_Game
                     }
                     else if (j == 0 || j == displayArray.GetLength(1) - 1)
                     {
-                        displayArray[i, j] = '|';
+                        displayArray[i, j] = '│';
                     }
                     else
                     {
