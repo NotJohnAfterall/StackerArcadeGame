@@ -30,10 +30,8 @@ namespace PVA_Game
             while (true)
             {
                 SpaceCounter();
-                //Console.WriteLine($"Variables {spacebarPressedTimes} {levelBefore}");
                 if (spacebarPressedTimes == 0)
                 {
-                    //Console.WriteLine("space = 0");
                     SetBordersInArray();
                     MoverMove();
                     Console.WriteLine($"LEVEL: {levelChanged}");
@@ -46,7 +44,6 @@ namespace PVA_Game
                     SetBordersInArray();
                     if (spacebarPressedTimes > levelBefore)
                     {
-                        //Console.WriteLine($"LEVEL CHANGE TRIGERED {spacebarPressedTimes} {levelChanged}");
                         if (spacebarPressedTimes > 8) { spacebarPressedTimes = 8; }
                         else { levelChanged++; freezeMoverPos = moverPos; }
                         stackingChecked = false;
@@ -99,7 +96,6 @@ namespace PVA_Game
                         Console.Write("YOU WIN !!!\t");
                     }
                     Console.WriteLine();
-
                 }
                 Thread.Sleep(500);
                 Console.Clear();
@@ -139,7 +135,6 @@ namespace PVA_Game
             if ((freezedLevelPoses[levelChanged] == freezedLevelPoses[levelChanged -1]) || levelChanged < 2 )
             {
                 if (levelChanged == 8 ) {WinScreen();}
-                //Console.WriteLine("Stacking checked");
                 stackAproved = true;
                 stackingChecked = true;
             }
@@ -221,7 +216,6 @@ namespace PVA_Game
                             displayArray[i, j] = '└';
                         }
                         else { displayArray[i, j] = '─'; }
-                        
                     }
                     else if (j == 0 || j == displayArray.GetLength(1) - 1)
                     {
